@@ -33,6 +33,5 @@ public class Point2 {
 
     public void setPointY(float pointY) {
         this.pointY = pointY;
-    }
-    
+    }  
 }

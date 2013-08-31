@@ -15,11 +15,17 @@ public class Data {
     private static Point2 mainPoint = new Point2(0F, 0F);
     private static ArrayList<Point2> polygonVertex = new ArrayList<>();
     private static ArrayList<Line> polygonEdges = new ArrayList<>();
+    private static ArrayList<Line> triangulationEdges = new ArrayList<>();
 
     public static void clearData() {
         mainPoint = new Point2(0F, 0F);
         polygonVertex.clear();
         polygonEdges.clear();
+        triangulationEdges.clear();
+    }
+    
+    public static void clearTriangulation () {
+         triangulationEdges.clear();
     }
     
     public static Point2 getMainPoint() {
@@ -33,11 +39,19 @@ public class Data {
     public static ArrayList<Point2> getPolygonVertex() {
         return polygonVertex;
     }
+    
+    public static ArrayList<Line> getTriangulationEdges() {
+        return triangulationEdges;
+    }
 
     public static void addPolygonVertex(Point2 vertex) {
         Data.polygonVertex.add(vertex);
         Data.polygonEdges.clear();
         calculatePolygonEdges(polygonVertex);
+    }
+    
+    public static void addTriangulationVertex(Line l) {
+        Data.triangulationEdges.add(l);
     }
     
     public static void calculatePolygonEdges(ArrayList<Point2> polygonVertex) {

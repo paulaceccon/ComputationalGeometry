@@ -29,6 +29,7 @@ public class Canvas extends JPanel {
     final static Color vertexColor = Color.red;
     final static Color lineColor = Color.white;
     final static Color infoColor = Color.black;
+    final static Color triangulationColor = Color.CYAN;
 
     //HOW TO REPAINT PROPERLY??
     @Override
@@ -39,6 +40,7 @@ public class Canvas extends JPanel {
         DrawMainPoint(g2d);
         DrawPolygonVertex(g2d);
         DrawPolygonEdges(g2d);
+        DrawTriangulationEdges(g2d);
         
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
@@ -69,15 +71,26 @@ public class Canvas extends JPanel {
     
     public void DrawPolygonEdges (Graphics2D g2d) {
         ArrayList<Line> polygonEdges = Data.getPolygonEdges();
-        if (polygonEdges.size() > 1) {
-            for (int i = 0; i < polygonEdges.size(); i++) {
-                float x1 = polygonEdges.get(i).GetStartPoint().getPointX(), y1 = polygonEdges.get(i).GetStartPoint().getPointY();
-                float x2 = polygonEdges.get(i).GetEndPoint().getPointX(), y2 = polygonEdges.get(i).GetEndPoint().getPointY();
-                g2d.setColor(lineColor);
-                g2d.draw(new Line2D.Float(x1, y1, x2, y2)); 
-                //g2d.setColor(infoColor);
-                //g2d.drawString(Integer.toString(i), Math.abs(x1+x2)/2, (float)(Math.min(y1, y2)+Math.abs(y1-y2)));
-            }
+        for (int i = 0; i < polygonEdges.size(); i++) {
+            float x1 = polygonEdges.get(i).GetStartPoint().getPointX(), y1 = polygonEdges.get(i).GetStartPoint().getPointY();
+            float x2 = polygonEdges.get(i).GetEndPoint().getPointX(), y2 = polygonEdges.get(i).GetEndPoint().getPointY();
+            g2d.setColor(lineColor);
+            g2d.draw(new Line2D.Float(x1, y1, x2, y2)); 
+            //g2d.setColor(infoColor);
+            //g2d.drawString(Integer.toString(i), Math.abs(x1+x2)/2, (float)(Math.min(y1, y2)+Math.abs(y1-y2)));
         }
+    }
+    
+    public void DrawTriangulationEdges (Graphics2D g2d) {
+        ArrayList<Line> triangulationEdges = Data.getTriangulationEdges();
+        for (int i = 0; i < triangulationEdges.size(); i++) {
+            float x1 = triangulationEdges.get(i).GetStartPoint().getPointX(), y1 = triangulationEdges.get(i).GetStartPoint().getPointY();
+            float x2 = triangulationEdges.get(i).GetEndPoint().getPointX(), y2 = triangulationEdges.get(i).GetEndPoint().getPointY();
+            g2d.setColor(triangulationColor);
+            g2d.draw(new Line2D.Float(x1, y1, x2, y2)); 
+            //g2d.setColor(infoColor);
+            //g2d.drawString(Integer.toString(i), Math.abs(x1+x2)/2, (float)(Math.min(y1, y2)+Math.abs(y1-y2)));
+        }
+        
     }
 }
