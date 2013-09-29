@@ -29,9 +29,9 @@ public class Canvas extends JPanel {
     final static Color vertexColor = Color.red;
     final static Color lineColor = Color.white;
     final static Color infoColor = Color.black;
-    final static Color triangulationColor = Color.cyan;
-    final static Color convexHullColor = Color.green;
+    final static Color triangulationColor = Color.CYAN;
 
+    //HOW TO REPAINT PROPERLY??
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -41,7 +41,6 @@ public class Canvas extends JPanel {
         DrawPolygonVertex(g2d);
         DrawPolygonEdges(g2d);
         DrawTriangulationEdges(g2d);
-        DrawConvexHullEdges(g2d);
         
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
@@ -91,18 +90,7 @@ public class Canvas extends JPanel {
             g2d.draw(new Line2D.Float(x1, y1, x2, y2)); 
             //g2d.setColor(infoColor);
             //g2d.drawString(Integer.toString(i), Math.abs(x1+x2)/2, (float)(Math.min(y1, y2)+Math.abs(y1-y2)));
-        } 
-    }
-    
-    public void DrawConvexHullEdges (Graphics2D g2d) {
-        ArrayList<Line> convexHullEdges = Data.getConvexHullEdges();
-        for (int i = 0; i < convexHullEdges.size(); i++) {
-            float x1 = convexHullEdges.get(i).GetStartPoint().getPointX(), y1 = convexHullEdges.get(i).GetStartPoint().getPointY();
-            float x2 = convexHullEdges.get(i).GetEndPoint().getPointX(), y2 = convexHullEdges.get(i).GetEndPoint().getPointY();
-            g2d.setColor(convexHullColor);
-            g2d.draw(new Line2D.Float(x1, y1, x2, y2)); 
-            //g2d.setColor(infoColor);
-            //g2d.drawString(Integer.toString(i), Math.abs(x1+x2)/2, (float)(Math.min(y1, y2)+Math.abs(y1-y2)));
-        } 
+        }
+        
     }
 }
