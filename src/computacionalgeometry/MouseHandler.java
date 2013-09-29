@@ -23,6 +23,13 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
             Data.setMainPoint(new Point2 (e.getX(), e.getY()));      
         }
     }
+    
+    public float translate(float value, float inputMin, float inputMax, float outputMin, float outputMax) {
+        float leftSpan = inputMax - inputMin;
+        float rightSpan = outputMax - outputMin;
+        float valueScaled = value - inputMin / leftSpan;
+        return outputMin + (valueScaled * rightSpan);
+    }
 
     @Override
     public void mousePressed(MouseEvent e) { }

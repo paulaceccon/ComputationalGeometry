@@ -48,7 +48,7 @@ public class GUI extends JPanel {
             public void actionPerformed(ActionEvent e) {               
                 Point2 p = new Point2(-1F,-1F);
                 boolean i = Line.Intersection(Data.getPolygonEdges().get(0), Data.getPolygonEdges().get(2), p);
-                JOptionPane.showMessageDialog(locatePointRT, i);
+                JOptionPane.showMessageDialog(linesIntersection, i);
             }        
         });
          
@@ -56,7 +56,11 @@ public class GUI extends JPanel {
         locatePointRT = new JButton("<html><center>Locate Point Using Ray Tracing</html></center>");
         locatePointRT.addActionListener( new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {               
+            public void actionPerformed(ActionEvent e) {       
+                if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
+                    JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
+                    return;
+                }
                 PointLocation location = Polygon.LocatePointUsingRayTracing(Data.getMainPoint(), Data.getPolygonVertex());
                 JOptionPane.showMessageDialog(locatePointRT, "The point is "+location+" the polygon.");
             }        
@@ -68,7 +72,7 @@ public class GUI extends JPanel {
             public void actionPerformed(ActionEvent e) {     
                 if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
                     JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
-                    return ;
+                    return;
                 }
                 PointLocation location = Polygon.LocatePointUsingRotationIndex(Data.getMainPoint(), Data.getPolygonVertex());
                 JOptionPane.showMessageDialog(locatePointRI, "The point is "+location+" the polygon.");
@@ -81,7 +85,7 @@ public class GUI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
                     JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
-                    return ;
+                    return;
                 }
                 Data.clearTriangulation();
                 ArrayList<Point2> v = new ArrayList(Data.getPolygonVertex()); 
@@ -89,11 +93,17 @@ public class GUI extends JPanel {
             }        
         });
         
-        convexHull = new JButton("<html><center>Convex Hull</html></center>");
+        convexHull = new JButton("<html><center>Graham Convex Hull</html></center>");
         convexHull.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
+                    JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
+                    return;
+                }
+                Data.clearConvexHull();
+                ArrayList<Point2> v = new ArrayList(Data.getPolygonVertex()); 
+                Polygon.GrahamConvexHull(v);
             }        
         });
         
