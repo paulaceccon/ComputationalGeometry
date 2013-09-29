@@ -26,6 +26,7 @@ public class GUI extends JPanel {
     private JButton locatePointRI; 
     private JButton triangulate; 
     private JButton convexHull; 
+    private JButton mergeHull; 
     private JButton linesIntersection;
     private JButton clear;
     
@@ -40,7 +41,7 @@ public class GUI extends JPanel {
     public GUI () {
         panel = new JPanel();
         optionsPanel = new JPanel();
-        optionsPanel.setLayout(new GridLayout(6, 1));
+        optionsPanel.setLayout(new GridLayout(7, 1));
         
         linesIntersection = new JButton("<html><center>Verify intersection of lines</center></html>");
         linesIntersection.addActionListener( new ActionListener() {
@@ -107,6 +108,20 @@ public class GUI extends JPanel {
             }        
         });
         
+        mergeHull = new JButton("<html><center>Merge Hull</html></center>");
+        mergeHull.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
+                    JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
+                    return;
+                }
+                Data.clearConvexHull();
+                ArrayList<Point2> v = new ArrayList(Data.getPolygonVertex()); 
+                Polygon.MergeHull(v);
+            }        
+        });
+        
         clear = new JButton("Clear Canvas");
         clear.addActionListener( new ActionListener() {
             @Override
@@ -119,6 +134,7 @@ public class GUI extends JPanel {
         optionsPanel.add(locatePointRI);
         optionsPanel.add(triangulate);
         optionsPanel.add(convexHull);
+        optionsPanel.add(mergeHull);
         optionsPanel.add(linesIntersection);
         optionsPanel.add(clear);
         optionsPanel.setPreferredSize(new Dimension(150, 600));
