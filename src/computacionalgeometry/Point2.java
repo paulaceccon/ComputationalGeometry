@@ -55,7 +55,7 @@ public class Point2 {
         double maxY = points.get(0).getPointY();   // start with the first value
         Point2 maxPoint = points.get(0);
         for (int i=1; i<points.size(); i++) {
-            if (points.get(i).getPointY() < maxY) 
+            if (points.get(i).getPointY() > maxY) 
             {
                 maxY = points.get(i).getPointY(); // new maximum
                 maxPoint = points.get(i);
@@ -70,7 +70,7 @@ public class Point2 {
           double minValue = points.get(0).getPointY();
           Point2 minPoint = points.get(0);
           for(int i=1;i<points.size();i++){  
-            if(points.get(i).getPointY() > minValue)
+            if(points.get(i).getPointY() < minValue)
             {
                 minPoint = points.get(i);
                 minValue = points.get(i).getPointY();  

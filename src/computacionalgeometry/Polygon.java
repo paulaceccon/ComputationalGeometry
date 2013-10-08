@@ -107,6 +107,7 @@ public class Polygon {
             int pointsInside = 0;
 
             Point2 p1, p2, p3;
+            //Build a polygon and check if it is an ear candidate
             p1 = VertexPoints.get(previous);
             p2 = VertexPoints.get(start);
             p3 = VertexPoints.get(next);
@@ -114,6 +115,7 @@ public class Polygon {
             Vector2 v0 = new Vector2(p2, p1);
             Vector2 v1 = new Vector2(p2, p3);
 
+            //Check if it's an ear or a mouth
             if (v0.IsCounterclockwise(v1)) {
                 ArrayList<Point2> polygon = new ArrayList<>();
                 polygon.add(p1);
@@ -125,6 +127,7 @@ public class Polygon {
                         pointsInside++;
                     }
                 }
+                //It there is no point inside this polygon, we can build a new edge
                 if (pointsInside == 0) {
                     Data.addTriangulationEdge(new Line(p1, p3));
                     VertexPoints.remove(start);
@@ -230,8 +233,7 @@ public class Polygon {
         }
         
         for (int i = 0; i < convexHull.size(); i++) {
-            System.out.println(convexHull.get(i).getPointX());
-            Data.addConvexHullVertex(convexHull.get(i));
+             Data.addConvexHullVertex(convexHull.get(i));
         }
     }
     
@@ -256,7 +258,7 @@ public class Polygon {
     
     public static ArrayList Merge (ArrayList<Point2> FirstHalf, ArrayList<Point2> SecondHalf) {
         ArrayList<Point2> pointsInside = new ArrayList<>();
-        ArrayList<Point2> sommets = new ArrayList<>();
+        ArrayList<Point2> xxx = new ArrayList<>();
 
         //********************upper tangent***************       
 
@@ -265,7 +267,7 @@ public class Polygon {
         //find the highest point of the rightmost part 
         Point2 secondPartHighestPoint = Point2.getMaxY(SecondHalf);
 
-        for(int i = 0; i< FirstHalf.size(); i++)
+        for(int i = 0; i < FirstHalf.size(); i++)
         {
             // check if the points lie on the line between highest point in leftmost and in rightmost
             // if true, the current point is above the line
@@ -273,23 +275,17 @@ public class Polygon {
             {
                 // the current point is above the line
                 firstPartHighestPoint = FirstHalf.get(i);
-            }
-            if (!pointsInside.contains(firstPartHighestPoint))
-            {
                 pointsInside.add(firstPartHighestPoint);
             }
         }
 
-        for(int i = 0; i < SecondHalf.size(); i++)
-        {
+        for(int i = 0; i < SecondHalf.size(); i++){
             if(Point2.isCollinear(firstPartHighestPoint, secondPartHighestPoint, SecondHalf.get(i)) < 0)
             {
                 // the current point is above the line
                 secondPartHighestPoint = SecondHalf.get(i);
-            }
-            if (!pointsInside.contains(secondPartHighestPoint))
                 pointsInside.add(secondPartHighestPoint);
-
+            }    
         }
 
         //******************lower tangent***************     
@@ -299,31 +295,32 @@ public class Polygon {
         // find the lowest point of the rightmost part
         Point2 secondPartLowestPoint = Point2.getMinY(SecondHalf);
 
-        for(int i = 0; i< FirstHalf.size(); i++)
+        for(int i = 0; i < FirstHalf.size(); i++)
         {
             // check if the points lie on the line between highest point in leftmost and in rightmost
             // if true, the current point is above the line
             if(Point2.isCollinear(firstPartLowestPoint, secondPartLowestPoint, FirstHalf.get(i)) > 0)
             {
-                // the current point is above the line
+                // the current point is below the line
                 firstPartLowestPoint = FirstHalf.get(i);
-            }
-            if (!pointsInside.contains(firstPartLowestPoint))
                 pointsInside.add(firstPartLowestPoint);
+            }       
         }
 
         for(int i = 0; i < SecondHalf.size(); i++)
         {
             if(Point2.isCollinear(firstPartLowestPoint, secondPartLowestPoint, SecondHalf.get(i)) > 0)
             {
-                // the current point is above the line
+                // the current point is below the line
                 secondPartLowestPoint = SecondHalf.get(i);
-            }
-            if (!pointsInside.contains(secondPartLowestPoint))
                 pointsInside.add(secondPartLowestPoint);
+            } 
         }
-    
-        return pointsInside;
+        
+       xxx.addAll(FirstHalf);
+       xxx.addAll(SecondHalf);
+       xxx.removeAll(pointsInside);
+        return xxx;
     }
 
     public static boolean IsCounterclockwise(ArrayList<Point2> VertexPoints) {
