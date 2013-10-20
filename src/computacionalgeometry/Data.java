@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Data {
 
     private static Point2 mainPoint = new Point2(0F, 0F);
+    private static Point2 vertexPoint = new Point2(0F, 0F);
     private static ArrayList<Point2> polygonVertex = new ArrayList<>();
     private static ArrayList<Line> polygonEdges = new ArrayList<>();
     private static ArrayList<Line> triangulationEdges = new ArrayList<>();
@@ -43,6 +44,14 @@ public class Data {
 
     public static void setMainPoint(Point2 mainPoint) {
         Data.mainPoint = mainPoint;
+    }
+    
+    public static Point2 getVertexPoint() {
+        return vertexPoint;
+    }
+
+    public static void setVertexPoint(Point2 vertexPoint) {
+        Data.vertexPoint = vertexPoint;
     }
 
     public static ArrayList<Point2> getPolygonVertex() {

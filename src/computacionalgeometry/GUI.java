@@ -12,6 +12,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -43,13 +44,21 @@ public class GUI extends JPanel {
         optionsPanel = new JPanel();
         optionsPanel.setLayout(new GridLayout(7, 1));
         
-        linesIntersection = new JButton("<html><center>Verify intersection of lines</center></html>");
+        linesIntersection = new JButton("<html><center>Verify if the Polygon is Simple</center></html>");
         linesIntersection.addActionListener( new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {               
-                Point2 p = new Point2(-1F,-1F);
-                boolean i = Line.Intersection(Data.getPolygonEdges().get(0), Data.getPolygonEdges().get(2), p);
-                JOptionPane.showMessageDialog(linesIntersection, i);
+            public void actionPerformed(ActionEvent e) { 
+                if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
+                    Collections.reverse(Data.getPolygonVertex());
+                Point2 p = new Point2(-1F, -1F);
+                boolean i = Polygon.CheckPolygonIsSimple(Data.getPolygonEdges(), p);
+                if (i) {
+
+                    JOptionPane.showMessageDialog(linesIntersection, "The polygon is not simple.\n"
+                            + "Intersection at point: ("+String.format("%.2f", p.getPointX())+";"+String.format("%.2f", p.getPointY())+")");
+                }
+                else
+                    JOptionPane.showMessageDialog(linesIntersection, "The polygon is simple.");   
             }        
         });
          
@@ -58,10 +67,8 @@ public class GUI extends JPanel {
         locatePointRT.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {       
-                if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
-                    JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
-                    return;
-                }
+                if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
+                    Collections.reverse(Data.getPolygonVertex());
                 PointLocation location = Polygon.LocatePointUsingRayTracing(Data.getMainPoint(), Data.getPolygonVertex());
                 JOptionPane.showMessageDialog(locatePointRT, "The point is "+location+" the polygon.");
             }        
@@ -71,10 +78,8 @@ public class GUI extends JPanel {
         locatePointRI.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {     
-                if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
-                    JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
-                    return;
-                }
+                if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
+                    Collections.reverse(Data.getPolygonVertex());
                 PointLocation location = Polygon.LocatePointUsingRotationIndex(Data.getMainPoint(), Data.getPolygonVertex());
                 JOptionPane.showMessageDialog(locatePointRI, "The point is "+location+" the polygon.");
             }        
@@ -84,10 +89,8 @@ public class GUI extends JPanel {
         triangulate.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
-                    JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
-                    return;
-                }
+                if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
+                    Collections.reverse(Data.getPolygonVertex());
                 Data.clearTriangulation();
                 ArrayList<Point2> v = new ArrayList(Data.getPolygonVertex()); 
                 Polygon.EarClippingTriangulation(v, 1);
@@ -98,10 +101,8 @@ public class GUI extends JPanel {
         convexHull.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
-                    JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
-                    return;
-                }
+                if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
+                    Collections.reverse(Data.getPolygonVertex());
                 Data.clearConvexHull();
                 ArrayList<Point2> v = new ArrayList(Data.getPolygonVertex()); 
                 Polygon.GrahamConvexHull(v);
@@ -112,10 +113,8 @@ public class GUI extends JPanel {
         mergeHull.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Polygon.IsCounterclockwise(Data.getPolygonVertex())) {
-                    JOptionPane.showMessageDialog(null, "The polygon is not counterclockwise oriented.");
-                    return;
-                }
+                if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
+                    Collections.reverse(Data.getPolygonVertex());
                 Data.clearConvexHull();
                 ArrayList<Point2> v = new ArrayList(Data.getPolygonVertex()); 
                 Polygon.MergeHull(v);
@@ -130,12 +129,12 @@ public class GUI extends JPanel {
             }        
         });
 
+        optionsPanel.add(linesIntersection);
         optionsPanel.add(locatePointRT);
         optionsPanel.add(locatePointRI);
         optionsPanel.add(triangulate);
         optionsPanel.add(convexHull);
         optionsPanel.add(mergeHull);
-        optionsPanel.add(linesIntersection);
         optionsPanel.add(clear);
         optionsPanel.setPreferredSize(new Dimension(150, 600));
         

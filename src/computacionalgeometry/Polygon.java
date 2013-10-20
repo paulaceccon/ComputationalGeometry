@@ -7,6 +7,7 @@ package computacionalgeometry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +19,22 @@ public class Polygon {
 
         INSIDE, OUTSIDE, ON
     };
+
+    public static boolean CheckPolygonIsSimple(ArrayList<Line> polygonEdges, Point2 p) {
+        boolean intersection = false;
+        for (int i = 0; i < polygonEdges.size(); i++) {
+            for (int j = i+1; j < polygonEdges.size(); j++) {
+                intersection = Line.Intersection(Data.getPolygonEdges().get(i), Data.getPolygonEdges().get(j), p);
+                if (intersection) {
+                    break;
+                }
+            }
+            if (intersection) {
+                break;
+            }
+        }
+        return intersection;
+    }
 
     public static PointLocation LocatePointUsingRayTracing(Point2 p, ArrayList<Point2> VertexPoints) {
         int numberOfIntersections = 0;
@@ -184,8 +201,6 @@ public class Polygon {
                 points.add(convexHull.get(M - 2));
                 points.add(convexHull.get(M - 1));
                 if (!IsCounterclockwise(points)) {
-                    System.out.println("Points tested: " + points.get(0).getPointX() + " " + points.get(1).getPointX() + " " + points.get(2).getPointX());
-                    System.out.println("Removed: " + convexHull.get(M - 2).getPointX() + "\n");
                     convexHull.remove(M - 2);
                     M--;
                 } else {
@@ -216,47 +231,48 @@ public class Polygon {
             Data.addConvexHullVertex(convexHull.get(i));
         }
     }
-    
-    public static void MergeHull (ArrayList<Point2> VertexPoints) {
-        
+
+    public static void MergeHull(ArrayList<Point2> VertexPoints) {
+
         ArrayList<Point2> xOrderedVertices = new ArrayList<>();
-        for (int i = 0; i < VertexPoints.size(); i++)
-            xOrderedVertices.add(VertexPoints.get(i)); 
+        for (int i = 0; i < VertexPoints.size(); i++) {
+            xOrderedVertices.add(VertexPoints.get(i));
+        }
         Collections.sort(xOrderedVertices, Point2.xPosition);
-        
+
         ArrayList<Point2> aux = DivideAndConquer(xOrderedVertices);
         ArrayList<Point2> convexHull = new ArrayList<>();
-        
+
         for (int i = 0; i < VertexPoints.size(); i++) {
-            if (aux.contains(VertexPoints.get(i)))
+            if (aux.contains(VertexPoints.get(i))) {
                 convexHull.add(VertexPoints.get(i));
+            }
         }
-        
+
         for (int i = 0; i < convexHull.size(); i++) {
-             Data.addConvexHullVertex(convexHull.get(i));
+            Data.addConvexHullVertex(convexHull.get(i));
         }
     }
-    
-    public static ArrayList DivideAndConquer (ArrayList<Point2> VertexPoints) {
-      
-        if (VertexPoints.size() < 3)
-	{
-            return VertexPoints;
-	}
 
-        int half = VertexPoints.size()/2;
-        
+    public static ArrayList DivideAndConquer(ArrayList<Point2> VertexPoints) {
+
+        if (VertexPoints.size() < 3) {
+            return VertexPoints;
+        }
+
+        int half = VertexPoints.size() / 2;
+
         ArrayList<Point2> firstHalf = new ArrayList<>(VertexPoints.subList(0, half));
         ArrayList<Point2> secondHalf = new ArrayList<>(VertexPoints.subList(half, VertexPoints.size()));
 
-	DivideAndConquer(firstHalf);
-	DivideAndConquer(secondHalf);
+        DivideAndConquer(firstHalf);
+        DivideAndConquer(secondHalf);
 
-	return Merge(firstHalf, secondHalf);
+        return Merge(firstHalf, secondHalf);
 
     }
-    
-    public static ArrayList Merge (ArrayList<Point2> FirstHalf, ArrayList<Point2> SecondHalf) {
+
+    public static ArrayList Merge(ArrayList<Point2> FirstHalf, ArrayList<Point2> SecondHalf) {
         ArrayList<Point2> pointsInside = new ArrayList<>();
         ArrayList<Point2> xxx = new ArrayList<>();
 
@@ -267,25 +283,22 @@ public class Polygon {
         //find the highest point of the rightmost part 
         Point2 secondPartHighestPoint = Point2.getMaxY(SecondHalf);
 
-        for(int i = 0; i < FirstHalf.size(); i++)
-        {
+        for (int i = 0; i < FirstHalf.size(); i++) {
             // check if the points lie on the line between highest point in leftmost and in rightmost
             // if true, the current point is above the line
-            if(Point2.isCollinear(firstPartHighestPoint, secondPartHighestPoint, FirstHalf.get(i)) < 0)
-            {
+            if (Point2.isCollinear(firstPartHighestPoint, secondPartHighestPoint, FirstHalf.get(i)) < 0) {
                 // the current point is above the line
                 firstPartHighestPoint = FirstHalf.get(i);
                 pointsInside.add(firstPartHighestPoint);
             }
         }
 
-        for(int i = 0; i < SecondHalf.size(); i++){
-            if(Point2.isCollinear(firstPartHighestPoint, secondPartHighestPoint, SecondHalf.get(i)) < 0)
-            {
+        for (int i = 0; i < SecondHalf.size(); i++) {
+            if (Point2.isCollinear(firstPartHighestPoint, secondPartHighestPoint, SecondHalf.get(i)) < 0) {
                 // the current point is above the line
                 secondPartHighestPoint = SecondHalf.get(i);
                 pointsInside.add(secondPartHighestPoint);
-            }    
+            }
         }
 
         //******************lower tangent***************     
@@ -295,31 +308,27 @@ public class Polygon {
         // find the lowest point of the rightmost part
         Point2 secondPartLowestPoint = Point2.getMinY(SecondHalf);
 
-        for(int i = 0; i < FirstHalf.size(); i++)
-        {
+        for (int i = 0; i < FirstHalf.size(); i++) {
             // check if the points lie on the line between highest point in leftmost and in rightmost
             // if true, the current point is above the line
-            if(Point2.isCollinear(firstPartLowestPoint, secondPartLowestPoint, FirstHalf.get(i)) > 0)
-            {
+            if (Point2.isCollinear(firstPartLowestPoint, secondPartLowestPoint, FirstHalf.get(i)) > 0) {
                 // the current point is below the line
                 firstPartLowestPoint = FirstHalf.get(i);
                 pointsInside.add(firstPartLowestPoint);
-            }       
+            }
         }
 
-        for(int i = 0; i < SecondHalf.size(); i++)
-        {
-            if(Point2.isCollinear(firstPartLowestPoint, secondPartLowestPoint, SecondHalf.get(i)) > 0)
-            {
+        for (int i = 0; i < SecondHalf.size(); i++) {
+            if (Point2.isCollinear(firstPartLowestPoint, secondPartLowestPoint, SecondHalf.get(i)) > 0) {
                 // the current point is below the line
                 secondPartLowestPoint = SecondHalf.get(i);
                 pointsInside.add(secondPartLowestPoint);
-            } 
+            }
         }
-        
-       xxx.addAll(FirstHalf);
-       xxx.addAll(SecondHalf);
-       xxx.removeAll(pointsInside);
+
+        xxx.addAll(FirstHalf);
+        xxx.addAll(SecondHalf);
+        xxx.removeAll(pointsInside);
         return xxx;
     }
 

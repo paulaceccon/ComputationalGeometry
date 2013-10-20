@@ -59,7 +59,7 @@ public class Line {
         
         
         if (det != 0) {
-            if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+            if (s > 0 && s < 1 && t > 0 && t < 1)
             {
                 i.setPointX(xa + (t * (xb-xa)));
                 i.setPointY(ya + (t * (yb-ya)));

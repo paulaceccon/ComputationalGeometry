@@ -47,6 +47,8 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
     public void mouseDragged(MouseEvent e) { }
 
     @Override
-    public void mouseMoved(MouseEvent e) { }
-    
+    public void mouseMoved(MouseEvent e) { 
+            Data.getVertexPoint().setPointX(e.getX());
+            Data.getVertexPoint().setPointY(e.getY());    
+    }
 }
