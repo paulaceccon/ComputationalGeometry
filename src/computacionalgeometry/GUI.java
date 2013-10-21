@@ -63,7 +63,7 @@ public class GUI extends JPanel {
         });
          
         
-        locatePointRT = new JButton("<html><center>Locate Point Using Ray Tracing</html></center>");
+        locatePointRT = new JButton("<html><center>Locate Point Using Ray Crossing</html></center>");
         locatePointRT.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {       
