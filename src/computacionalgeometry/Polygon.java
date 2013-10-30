@@ -7,8 +7,6 @@ package computacionalgeometry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
-import java.util.Vector;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,7 +22,7 @@ public class Polygon {
     public static boolean CheckPolygonIsSimple(ArrayList<Line> polygonEdges, Point2D p) {
         boolean intersection = false;
         for (int i = 0; i < polygonEdges.size(); i++) {
-            for (int j = i+1; j < polygonEdges.size(); j++) {
+            for (int j = i + 1; j < polygonEdges.size(); j++) {
                 intersection = Line.Intersection(Data.getPolygonEdges().get(i), Data.getPolygonEdges().get(j), p);
                 if (intersection) {
                     break;
@@ -80,7 +78,6 @@ public class Polygon {
                     }
                 }
             }
-
         }
 
         if (numberOfIntersections % 2 == 0) {
@@ -241,11 +238,25 @@ public class Polygon {
         }
         Collections.sort(xOrderedVertices, Point2D.xPosition);
 
-        ArrayList<Point2D> convexHull = DivideAndConquer(xOrderedVertices);
-       
-        for (int i = 0; i < convexHull.size(); i++) {
-            Data.addConvexHullVertex(convexHull.get(i));
-        }
+//        ArrayList<Point2D> convexHull = DivideAndConquer(xOrderedVertices);
+//
+//        for (int i = 0; i < convexHull.size(); i++) {
+//            Data.addConvexHullVertex(convexHull.get(i));
+//        }
+        
+         ArrayList<Point2D> aux = DivideAndConquer(xOrderedVertices);
+         ArrayList<Point2D> convexHull = new ArrayList<>();
+     
+         for (int i = 0; i < VertexPoints.size(); i++) {
+            if (aux.contains(VertexPoints.get(i))) {
+                 convexHull.add(VertexPoints.get(i));
+            }
+         }
+        
+         for (int i = 0; i < convexHull.size(); i++) {
+             Data.addConvexHullVertex(convexHull.get(i));
+         }
+
     }
 
     public static ArrayList DivideAndConquer(ArrayList<Point2D> VertexPoints) {
@@ -261,6 +272,26 @@ public class Polygon {
 
         DivideAndConquer(firstHalf);
         DivideAndConquer(secondHalf);
+        
+        if(firstHalf.size() == 3)
+        {
+            Vector2D v1 = new Vector2D(firstHalf.get(1), firstHalf.get(0));
+            Vector2D v2 = new Vector2D(firstHalf.get(2), firstHalf.get(1));
+            if (v1.CrossProduct(v2) < 0)
+            {
+                Collections.swap(firstHalf, 1, 2);
+            }
+        }
+        
+        if(secondHalf.size() == 3)
+        {
+            Vector2D v1 = new Vector2D(secondHalf.get(1), secondHalf.get(0));
+            Vector2D v2 = new Vector2D(secondHalf.get(2), secondHalf.get(1));
+            if (v1.CrossProduct(v2) < 0)
+            {
+                Collections.swap(secondHalf, 1, 2);
+            }
+        }
 
         return Merge(firstHalf, secondHalf);
 
@@ -269,31 +300,29 @@ public class Polygon {
     public static ArrayList Merge(ArrayList<Point2D> FirstHalf, ArrayList<Point2D> SecondHalf) {
         ArrayList<Point2D> points = new ArrayList<>();
         int counter = 0;
-        
+
         //********************upper tangent***************       
         Point2D firstPartHighestPoint = Point2D.getMaxY(FirstHalf);
         Point2D secondPartHighestPoint = Point2D.getMaxY(SecondHalf);
 
         int i = SecondHalf.indexOf(secondPartHighestPoint);
-        for (i = (i + SecondHalf.size() - 1) % SecondHalf.size(); SecondHalf.size() > 1 ;i = (i+1)%SecondHalf.size())
-        {
+        for (i = (i + SecondHalf.size() - 1) % SecondHalf.size(); SecondHalf.size() > 1; i = (i + 1) % SecondHalf.size()) {
             Vector2D v1 = new Vector2D(firstPartHighestPoint, SecondHalf.get(i));
-            Vector2D v2 = new Vector2D(SecondHalf.get(i), SecondHalf.get((i+1)%SecondHalf.size()));
+            Vector2D v2 = new Vector2D(SecondHalf.get(i), SecondHalf.get((i + 1) % SecondHalf.size()));
             if (v1.CrossProduct(v2) < 0) {
                 secondPartHighestPoint = SecondHalf.get(i);
-                break; 
-            }                
+                break;
+            }
         }
-        
+
         i = FirstHalf.indexOf(firstPartHighestPoint);
-        for (i = (i + FirstHalf.size() - 1) % FirstHalf.size(); FirstHalf.size() > 1 ;i = (i+1)%FirstHalf.size())
-        {
+        for (i = (i + FirstHalf.size() - 1) % FirstHalf.size(); FirstHalf.size() > 1; i = (i + 1) % FirstHalf.size()) {
             Vector2D v1 = new Vector2D(secondPartHighestPoint, FirstHalf.get(i));
-            Vector2D v2 = new Vector2D(FirstHalf.get(i), FirstHalf.get((i+1)%FirstHalf.size()));
+            Vector2D v2 = new Vector2D(FirstHalf.get(i), FirstHalf.get((i + 1) % FirstHalf.size()));
             if (v1.CrossProduct(v2) > 0) {
                 firstPartHighestPoint = FirstHalf.get(i);
-                break; 
-            }                
+                break;
+            }
         }
 
         //******************lower tangent***************     
@@ -301,50 +330,48 @@ public class Polygon {
         Point2D secondPartLowestPoint = Point2D.getMinY(SecondHalf);
 
         i = SecondHalf.indexOf(secondPartLowestPoint);
-        for (i = (i + SecondHalf.size() - 1) % SecondHalf.size(); SecondHalf.size() > 1 ;i = (i+1)%SecondHalf.size())
-        {
+        for (i = (i + SecondHalf.size() - 1) % SecondHalf.size(); SecondHalf.size() > 1; i = (i + 1) % SecondHalf.size()) {
             Vector2D v1 = new Vector2D(firstPartLowestPoint, SecondHalf.get(i));
-            Vector2D v2 = new Vector2D(SecondHalf.get(i), SecondHalf.get((i+1)%SecondHalf.size()));
+            Vector2D v2 = new Vector2D(SecondHalf.get(i), SecondHalf.get((i + 1) % SecondHalf.size()));
             if (v1.CrossProduct(v2) > 0) {
                 secondPartLowestPoint = SecondHalf.get(i);
-                break; 
-            }                
+                break;
+            }
         }
-        
+
         i = FirstHalf.indexOf(firstPartLowestPoint);
-        for (i = (i + FirstHalf.size() - 1) % FirstHalf.size(); FirstHalf.size() > 1 ;i = (i+1)%FirstHalf.size())
-        {
+        for (i = (i + FirstHalf.size() - 1) % FirstHalf.size(); FirstHalf.size() > 1; i = (i + 1) % FirstHalf.size()) {
             Vector2D v1 = new Vector2D(secondPartLowestPoint, FirstHalf.get(i));
-            Vector2D v2 = new Vector2D(FirstHalf.get(i), FirstHalf.get((i+1)%FirstHalf.size()));
+            Vector2D v2 = new Vector2D(FirstHalf.get(i), FirstHalf.get((i + 1) % FirstHalf.size()));
             if (v1.CrossProduct(v2) < 0) {
                 firstPartLowestPoint = FirstHalf.get(i);
-                break; 
-            }                
+                break;
+            }
         }
-        
+
         int index1f = FirstHalf.indexOf(firstPartHighestPoint);
         int index2f = FirstHalf.indexOf(firstPartLowestPoint);
-              
-        for (i = (index1f+1)%FirstHalf.size(); i != index2f && counter < FirstHalf.size(); i=(i+1)%FirstHalf.size()) {
+
+        for (i = (index1f + 1) % FirstHalf.size(); i != index2f && counter < FirstHalf.size(); i = (i + 1) % FirstHalf.size()) {
             counter++;
             points.add(FirstHalf.get(i));
         }
         FirstHalf.removeAll(points);
-           
-        int index1s = SecondHalf.indexOf(secondPartLowestPoint);
-        int index2s = SecondHalf.indexOf(secondPartHighestPoint);
-              
+
+        int index2s = SecondHalf.indexOf(secondPartLowestPoint);
+        int index1s = SecondHalf.indexOf(secondPartHighestPoint);
+
         points.clear();
         counter = 0;
-        for (i = (index1s+1)%SecondHalf.size(); i != index2s && counter < SecondHalf.size(); i=(i+1)%SecondHalf.size()) {
+        for (i = (index1s + 1) % SecondHalf.size(); i != index2s && counter < SecondHalf.size(); i = (i + 1) % SecondHalf.size()) {
             counter++;
             points.add(SecondHalf.get(i));
         }
-        
+
         SecondHalf.removeAll(points);
-        
+
         FirstHalf.addAll(SecondHalf);
-        
+
         return FirstHalf;
     }
 
