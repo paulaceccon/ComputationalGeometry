@@ -11,12 +11,12 @@ import java.util.Comparator;
  *
  * @author paulaceccon
  */
-public class Point2 {
+public class Point2D {
     
     private float pointX;
     private float pointY;
 
-    public Point2 (float pointX, float pointY) 
+    public Point2D (float pointX, float pointY) 
     {
         this.pointX = pointX;
         this.pointY = pointY;
@@ -38,22 +38,22 @@ public class Point2 {
         this.pointY = pointY;
     }  
     
-    static public Comparator<Point2> xPosition;
+    static public Comparator<Point2D> xPosition;
     
     static {
-        xPosition = new Comparator<Point2>(){
+        xPosition = new Comparator<Point2D>(){
             @Override
-            public int compare(Point2 p1, Point2 p2){
+            public int compare(Point2D p1, Point2D p2){
                 return (p1.getPointX() < p2.getPointX() ) ? -1: (p1.getPointX() > p2.getPointX()) ? 1:0 ;
             }
         };
     }
     
     // the point with maximum Y
-    public static Point2 getMaxY(ArrayList<Point2> points) 
+    public static Point2D getMaxY(ArrayList<Point2D> points) 
     {
         double maxY = points.get(0).getPointY();   // start with the first value
-        Point2 maxPoint = points.get(0);
+        Point2D maxPoint = points.get(0);
         for (int i=1; i<points.size(); i++) {
             if (points.get(i).getPointY() > maxY) 
             {
@@ -65,10 +65,10 @@ public class Point2 {
     }
 
     // a method to find the Point with the minimum y 
-    public static Point2 getMinY(ArrayList<Point2> points)
+    public static Point2D getMinY(ArrayList<Point2D> points)
     {  
           double minValue = points.get(0).getPointY();
-          Point2 minPoint = points.get(0);
+          Point2D minPoint = points.get(0);
           for(int i=1;i<points.size();i++){  
             if(points.get(i).getPointY() < minValue)
             {
@@ -85,7 +85,7 @@ public class Point2 {
     // it is 
     // < 0 if the point 'c' is below the line (assumption : horizontal line) 
     // > 0 if the point 'c' is above the line 
-    public static float isCollinear(Point2 a, Point2 b, Point2 c)
+    public static float isCollinear(Point2D a, Point2D b, Point2D c)
     {
          return ((b.getPointX() - a.getPointX())*(c.getPointY() - a.getPointY()) - 
                  (b.getPointY() - a.getPointY())*(c.getPointX() - a.getPointX()));

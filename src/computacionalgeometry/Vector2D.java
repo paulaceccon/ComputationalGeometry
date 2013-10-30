@@ -8,15 +8,15 @@ package computacionalgeometry;
  *
  * @author paulaceccon
  */
-public class Vector2 {
+public class Vector2D {
     
-    private Point2 p;
+    private Point2D p;
 
-    Vector2(Point2 p0, Point2 p1) {
-        p = new Point2(p1.getPointX()-p0.getPointX(), p1.getPointY()-p0.getPointY());
+    Vector2D(Point2D p0, Point2D p1) {
+        p = new Point2D(p1.getPointX()-p0.getPointX(), p1.getPointY()-p0.getPointY());
     }
 
-    public Point2 getPoint() {
+    public Point2D getPoint() {
         return p;
     }
     
@@ -28,22 +28,22 @@ public class Vector2 {
         return getPoint().getPointY();
     }      
     
-    public float DotProduct (Vector2 p1)
+    public float DotProduct (Vector2D p1)
     {
         return this.getX() * p1.getX() + this.getY() + p1.getY();
     }
     
-    public float CrossProduct (Vector2 p1)
+    public float CrossProduct (Vector2D p1)
     {
         return this.getX() * p1.getY() - this.getY() * p1.getX();
     }
     
-    public float Magnitude (Vector2 p0)
+    public float Magnitude (Vector2D p0)
     {
         return (float) (Math.sqrt(Math.pow(p0.getX(), 2) + Math.pow(p0.getY(), 2)));
     }
     
-    public float OrientedAngle (Vector2 v) {
+    public float OrientedAngle (Vector2D v) {
         float angle = (float) (Math.acos((this.DotProduct(v))/(Magnitude(v) * Magnitude(this))));
         
         if (this.CrossProduct(v) >= 0) {
@@ -54,7 +54,7 @@ public class Vector2 {
         }
     }
     
-    public boolean IsCounterclockwise (Vector2 v) {
+    public boolean IsCounterclockwise (Vector2D v) {
 	float crossProduct = this.CrossProduct(v);
 	return crossProduct > 0;
     }

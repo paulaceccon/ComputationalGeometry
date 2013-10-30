@@ -12,16 +12,16 @@ import java.util.ArrayList;
  */
 public class Data {
 
-    private static Point2 mainPoint = new Point2(0F, 0F);
-    private static Point2 vertexPoint = new Point2(0F, 0F);
-    private static ArrayList<Point2> polygonVertex = new ArrayList<>();
+    private static Point2D mainPoint = new Point2D(0F, 0F);
+    private static Point2D vertexPoint = new Point2D(0F, 0F);
+    private static ArrayList<Point2D> polygonVertex = new ArrayList<>();
     private static ArrayList<Line> polygonEdges = new ArrayList<>();
     private static ArrayList<Line> triangulationEdges = new ArrayList<>();
-    private static ArrayList<Point2> convexHullVertex = new ArrayList<>();
+    private static ArrayList<Point2D> convexHullVertex = new ArrayList<>();
     private static ArrayList<Line> convexHullEdges = new ArrayList<>();
 
     public static void clearData() {
-        mainPoint = new Point2(0F, 0F);
+        mainPoint = new Point2D(0F, 0F);
         polygonVertex.clear();
         polygonEdges.clear();
         triangulationEdges.clear();
@@ -38,23 +38,23 @@ public class Data {
         convexHullEdges.clear();
     }
 
-    public static Point2 getMainPoint() {
+    public static Point2D getMainPoint() {
         return mainPoint;
     }
 
-    public static void setMainPoint(Point2 mainPoint) {
+    public static void setMainPoint(Point2D mainPoint) {
         Data.mainPoint = mainPoint;
     }
     
-    public static Point2 getVertexPoint() {
+    public static Point2D getVertexPoint() {
         return vertexPoint;
     }
 
-    public static void setVertexPoint(Point2 vertexPoint) {
+    public static void setVertexPoint(Point2D vertexPoint) {
         Data.vertexPoint = vertexPoint;
     }
 
-    public static ArrayList<Point2> getPolygonVertex() {
+    public static ArrayList<Point2D> getPolygonVertex() {
         return polygonVertex;
     }
 
@@ -70,7 +70,7 @@ public class Data {
         return convexHullEdges;
     }
 
-    public static void addPolygonVertex(Point2 vertex) {
+    public static void addPolygonVertex(Point2D vertex) {
         Data.polygonVertex.add(vertex);
         Data.polygonEdges.clear();
         calculatePolygonEdges(polygonVertex);
@@ -80,13 +80,13 @@ public class Data {
         Data.triangulationEdges.add(l);
     }
 
-    public static void addConvexHullVertex(Point2 vertex) {
+    public static void addConvexHullVertex(Point2D vertex) {
         Data.convexHullVertex.add(vertex);
         Data.convexHullEdges.clear();
         calculateConvexHullEdges(convexHullVertex);
     }
 
-    public static void calculatePolygonEdges(ArrayList<Point2> polygonVertex) {
+    public static void calculatePolygonEdges(ArrayList<Point2D> polygonVertex) {
         for (int i = 0; i < polygonVertex.size(); i++) {
             if (i == polygonVertex.size() - 1) {
                 polygonEdges.add(new Line(polygonVertex.get(i), polygonVertex.get(0)));
@@ -96,7 +96,7 @@ public class Data {
         }
     }
 
-    public static void calculateConvexHullEdges(ArrayList<Point2> convexHullVertex) {
+    public static void calculateConvexHullEdges(ArrayList<Point2D> convexHullVertex) {
         for (int i = 0; i < convexHullVertex.size(); i++) {
             if (i == convexHullVertex.size() - 1) {
                 convexHullEdges.add(new Line(convexHullVertex.get(i), convexHullVertex.get(0)));

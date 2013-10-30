@@ -50,7 +50,7 @@ public class GUI extends JPanel {
             public void actionPerformed(ActionEvent e) { 
                 if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
                     Collections.reverse(Data.getPolygonVertex());
-                Point2 p = new Point2(-1F, -1F);
+                Point2D p = new Point2D(-1F, -1F);
                 boolean i = Polygon.CheckPolygonIsSimple(Data.getPolygonEdges(), p);
                 if (i) {
 
@@ -92,7 +92,7 @@ public class GUI extends JPanel {
                 if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
                     Collections.reverse(Data.getPolygonVertex());
                 Data.clearTriangulation();
-                ArrayList<Point2> v = new ArrayList(Data.getPolygonVertex()); 
+                ArrayList<Point2D> v = new ArrayList(Data.getPolygonVertex()); 
                 Polygon.EarClippingTriangulation(v, 1);
             }        
         });
@@ -104,7 +104,7 @@ public class GUI extends JPanel {
                 if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
                     Collections.reverse(Data.getPolygonVertex());
                 Data.clearConvexHull();
-                ArrayList<Point2> v = new ArrayList(Data.getPolygonVertex()); 
+                ArrayList<Point2D> v = new ArrayList(Data.getPolygonVertex()); 
                 Polygon.GrahamConvexHull(v);
             }        
         });
@@ -116,7 +116,7 @@ public class GUI extends JPanel {
                 if (Polygon.IsCounterclockwise(Data.getPolygonVertex()))               
                     Collections.reverse(Data.getPolygonVertex());
                 Data.clearConvexHull();
-                ArrayList<Point2> v = new ArrayList(Data.getPolygonVertex()); 
+                ArrayList<Point2D> v = new ArrayList(Data.getPolygonVertex()); 
                 Polygon.MergeHull(v);
             }        
         });

@@ -7,6 +7,7 @@ package computacionalgeometry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
+import java.util.Vector;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,7 +21,7 @@ public class Polygon {
         INSIDE, OUTSIDE, ON
     };
 
-    public static boolean CheckPolygonIsSimple(ArrayList<Line> polygonEdges, Point2 p) {
+    public static boolean CheckPolygonIsSimple(ArrayList<Line> polygonEdges, Point2D p) {
         boolean intersection = false;
         for (int i = 0; i < polygonEdges.size(); i++) {
             for (int j = i+1; j < polygonEdges.size(); j++) {
@@ -36,19 +37,19 @@ public class Polygon {
         return intersection;
     }
 
-    public static PointLocation LocatePointUsingRayTracing(Point2 p, ArrayList<Point2> VertexPoints) {
+    public static PointLocation LocatePointUsingRayTracing(Point2D p, ArrayList<Point2D> VertexPoints) {
         int numberOfIntersections = 0;
-        Line l1 = new Line(p, new Point2(p.getPointX() + 800, p.getPointY()));
+        Line l1 = new Line(p, new Point2D(p.getPointX() + 800, p.getPointY()));
 
         for (int i = 0; i < VertexPoints.size(); i++) {
             //Check if the point is a vertex
-            Point2 p1 = VertexPoints.get(i);
+            Point2D p1 = VertexPoints.get(i);
             if (p == p1) {
                 return PointLocation.ON;
             }
 
             //Building edges
-            Point2 p2;
+            Point2D p2;
             if (i == VertexPoints.size() - 1) {
                 p2 = VertexPoints.get(0);
             } else {
@@ -58,7 +59,7 @@ public class Polygon {
 
             if (p1.getPointX() != p2.getPointX()) {
                 if (p1.getPointY() != p2.getPointY()) {
-                    Point2 pointOfIntersection = new Point2(-1, -1);
+                    Point2D pointOfIntersection = new Point2D(-1, -1);
                     if (Line.Intersection(l1, l2, pointOfIntersection)) {
                         if (pointOfIntersection.getPointX() >= Math.min(p1.getPointX(), p2.getPointX()) && pointOfIntersection.getPointX() <= Math.max(p1.getPointX(), p2.getPointX())
                                 && pointOfIntersection.getPointY() >= Math.min(p1.getPointY(), p2.getPointY()) && pointOfIntersection.getPointY() <= Math.max(p1.getPointY(), p2.getPointY())) {
@@ -88,22 +89,22 @@ public class Polygon {
         return PointLocation.INSIDE;
     }
 
-    public static PointLocation LocatePointUsingRotationIndex(Point2 p, ArrayList<Point2> VertexPoints) {
+    public static PointLocation LocatePointUsingRotationIndex(Point2D p, ArrayList<Point2D> VertexPoints) {
         double rotationIndex = 0;
 
         for (int i = 0; i < VertexPoints.size(); i++) {
-            Point2 p1 = VertexPoints.get(i);
+            Point2D p1 = VertexPoints.get(i);
 
             //Building edges
-            Point2 p2;
+            Point2D p2;
             if (i == VertexPoints.size() - 1) {
                 p2 = VertexPoints.get(0);
             } else {
                 p2 = VertexPoints.get(i + 1);
             }
 
-            Vector2 v1 = new Vector2(p, p1);
-            Vector2 v2 = new Vector2(p, p2);
+            Vector2D v1 = new Vector2D(p, p1);
+            Vector2D v2 = new Vector2D(p, p2);
 
             rotationIndex += v2.OrientedAngle(v1);
         }
@@ -117,24 +118,24 @@ public class Polygon {
         }
     }
 
-    public static void EarClippingTriangulation(ArrayList<Point2> VertexPoints, int start) {
+    public static void EarClippingTriangulation(ArrayList<Point2D> VertexPoints, int start) {
         if (VertexPoints.size() > 3 && start < VertexPoints.size() - 1) {
             int previous = start - 1;
             int next = start + 1;
             int pointsInside = 0;
 
-            Point2 p1, p2, p3;
+            Point2D p1, p2, p3;
             //Build a polygon and check if it is an ear candidate
             p1 = VertexPoints.get(previous);
             p2 = VertexPoints.get(start);
             p3 = VertexPoints.get(next);
 
-            Vector2 v0 = new Vector2(p2, p1);
-            Vector2 v1 = new Vector2(p2, p3);
+            Vector2D v0 = new Vector2D(p2, p1);
+            Vector2D v1 = new Vector2D(p2, p3);
 
             //Check if it's an ear or a mouth
             if (v0.IsCounterclockwise(v1)) {
-                ArrayList<Point2> polygon = new ArrayList<>();
+                ArrayList<Point2D> polygon = new ArrayList<>();
                 polygon.add(p1);
                 polygon.add(p2);
                 polygon.add(p3);
@@ -159,7 +160,7 @@ public class Polygon {
         }
     }
 
-    public static void GrahamConvexHull(ArrayList<Point2> VertexPoints) {
+    public static void GrahamConvexHull(ArrayList<Point2D> VertexPoints) {
 
         int lowestYcoordinatePoint = 0;
 
@@ -171,11 +172,11 @@ public class Polygon {
 
         for (int i = 0; i < VertexPoints.size(); i++) {
             if (i != lowestYcoordinatePoint) {
-                Point2 p1 = VertexPoints.get(lowestYcoordinatePoint);
-                Point2 p2 = VertexPoints.get(i);
+                Point2D p1 = VertexPoints.get(lowestYcoordinatePoint);
+                Point2D p2 = VertexPoints.get(i);
 
-                Vector2 v1 = new Vector2(p2, p1);
-                Vector2 v2 = new Vector2(new Point2(400, 0), new Point2(0, 0));
+                Vector2D v1 = new Vector2D(p2, p1);
+                Vector2D v2 = new Vector2D(new Point2D(400, 0), new Point2D(0, 0));
                 orientedAngle.put(v2.OrientedAngle(v1), i);
             }
         }
@@ -186,12 +187,12 @@ public class Polygon {
             orientedAngleIndex.add(value);
         }
 
-        ArrayList<Point2> convexHull = new ArrayList<>();
+        ArrayList<Point2D> convexHull = new ArrayList<>();
         convexHull.add(VertexPoints.get(orientedAngleIndex.get(0)));
         convexHull.add(VertexPoints.get(orientedAngleIndex.get(1)));
         convexHull.add(VertexPoints.get(orientedAngleIndex.get(2)));
 
-        ArrayList<Point2> points = new ArrayList<>();
+        ArrayList<Point2D> points = new ArrayList<>();
         int M = convexHull.size();
         for (int i = 3; i < orientedAngleIndex.size() + 1; i++) {
 
@@ -232,29 +233,22 @@ public class Polygon {
         }
     }
 
-    public static void MergeHull(ArrayList<Point2> VertexPoints) {
+    public static void MergeHull(ArrayList<Point2D> VertexPoints) {
 
-        ArrayList<Point2> xOrderedVertices = new ArrayList<>();
+        ArrayList<Point2D> xOrderedVertices = new ArrayList<>();
         for (int i = 0; i < VertexPoints.size(); i++) {
             xOrderedVertices.add(VertexPoints.get(i));
         }
-        Collections.sort(xOrderedVertices, Point2.xPosition);
+        Collections.sort(xOrderedVertices, Point2D.xPosition);
 
-        ArrayList<Point2> aux = DivideAndConquer(xOrderedVertices);
-        ArrayList<Point2> convexHull = new ArrayList<>();
-
-        for (int i = 0; i < VertexPoints.size(); i++) {
-            if (aux.contains(VertexPoints.get(i))) {
-                convexHull.add(VertexPoints.get(i));
-            }
-        }
-
+        ArrayList<Point2D> convexHull = DivideAndConquer(xOrderedVertices);
+       
         for (int i = 0; i < convexHull.size(); i++) {
             Data.addConvexHullVertex(convexHull.get(i));
         }
     }
 
-    public static ArrayList DivideAndConquer(ArrayList<Point2> VertexPoints) {
+    public static ArrayList DivideAndConquer(ArrayList<Point2D> VertexPoints) {
 
         if (VertexPoints.size() < 3) {
             return VertexPoints;
@@ -262,8 +256,8 @@ public class Polygon {
 
         int half = VertexPoints.size() / 2;
 
-        ArrayList<Point2> firstHalf = new ArrayList<>(VertexPoints.subList(0, half));
-        ArrayList<Point2> secondHalf = new ArrayList<>(VertexPoints.subList(half, VertexPoints.size()));
+        ArrayList<Point2D> firstHalf = new ArrayList<>(VertexPoints.subList(0, half));
+        ArrayList<Point2D> secondHalf = new ArrayList<>(VertexPoints.subList(half, VertexPoints.size()));
 
         DivideAndConquer(firstHalf);
         DivideAndConquer(secondHalf);
@@ -272,72 +266,94 @@ public class Polygon {
 
     }
 
-    public static ArrayList Merge(ArrayList<Point2> FirstHalf, ArrayList<Point2> SecondHalf) {
-        ArrayList<Point2> pointsInside = new ArrayList<>();
-        ArrayList<Point2> xxx = new ArrayList<>();
-
+    public static ArrayList Merge(ArrayList<Point2D> FirstHalf, ArrayList<Point2D> SecondHalf) {
+        ArrayList<Point2D> points = new ArrayList<>();
+        int counter = 0;
+        
         //********************upper tangent***************       
+        Point2D firstPartHighestPoint = Point2D.getMaxY(FirstHalf);
+        Point2D secondPartHighestPoint = Point2D.getMaxY(SecondHalf);
 
-        //find the highest point of the leftmost part
-        Point2 firstPartHighestPoint = Point2.getMaxY(FirstHalf);
-        //find the highest point of the rightmost part 
-        Point2 secondPartHighestPoint = Point2.getMaxY(SecondHalf);
-
-        for (int i = 0; i < FirstHalf.size(); i++) {
-            // check if the points lie on the line between highest point in leftmost and in rightmost
-            // if true, the current point is above the line
-            if (Point2.isCollinear(firstPartHighestPoint, secondPartHighestPoint, FirstHalf.get(i)) < 0) {
-                // the current point is above the line
-                firstPartHighestPoint = FirstHalf.get(i);
-                pointsInside.add(firstPartHighestPoint);
-            }
-        }
-
-        for (int i = 0; i < SecondHalf.size(); i++) {
-            if (Point2.isCollinear(firstPartHighestPoint, secondPartHighestPoint, SecondHalf.get(i)) < 0) {
-                // the current point is above the line
+        int i = SecondHalf.indexOf(secondPartHighestPoint);
+        for (i = (i + SecondHalf.size() - 1) % SecondHalf.size(); SecondHalf.size() > 1 ;i = (i+1)%SecondHalf.size())
+        {
+            Vector2D v1 = new Vector2D(firstPartHighestPoint, SecondHalf.get(i));
+            Vector2D v2 = new Vector2D(SecondHalf.get(i), SecondHalf.get((i+1)%SecondHalf.size()));
+            if (v1.CrossProduct(v2) < 0) {
                 secondPartHighestPoint = SecondHalf.get(i);
-                pointsInside.add(secondPartHighestPoint);
-            }
+                break; 
+            }                
+        }
+        
+        i = FirstHalf.indexOf(firstPartHighestPoint);
+        for (i = (i + FirstHalf.size() - 1) % FirstHalf.size(); FirstHalf.size() > 1 ;i = (i+1)%FirstHalf.size())
+        {
+            Vector2D v1 = new Vector2D(secondPartHighestPoint, FirstHalf.get(i));
+            Vector2D v2 = new Vector2D(FirstHalf.get(i), FirstHalf.get((i+1)%FirstHalf.size()));
+            if (v1.CrossProduct(v2) > 0) {
+                firstPartHighestPoint = FirstHalf.get(i);
+                break; 
+            }                
         }
 
         //******************lower tangent***************     
+        Point2D firstPartLowestPoint = Point2D.getMinY(FirstHalf);
+        Point2D secondPartLowestPoint = Point2D.getMinY(SecondHalf);
 
-        //find the lowest point of the leftmost part 
-        Point2 firstPartLowestPoint = Point2.getMinY(FirstHalf);
-        // find the lowest point of the rightmost part
-        Point2 secondPartLowestPoint = Point2.getMinY(SecondHalf);
-
-        for (int i = 0; i < FirstHalf.size(); i++) {
-            // check if the points lie on the line between highest point in leftmost and in rightmost
-            // if true, the current point is above the line
-            if (Point2.isCollinear(firstPartLowestPoint, secondPartLowestPoint, FirstHalf.get(i)) > 0) {
-                // the current point is below the line
-                firstPartLowestPoint = FirstHalf.get(i);
-                pointsInside.add(firstPartLowestPoint);
-            }
-        }
-
-        for (int i = 0; i < SecondHalf.size(); i++) {
-            if (Point2.isCollinear(firstPartLowestPoint, secondPartLowestPoint, SecondHalf.get(i)) > 0) {
-                // the current point is below the line
+        i = SecondHalf.indexOf(secondPartLowestPoint);
+        for (i = (i + SecondHalf.size() - 1) % SecondHalf.size(); SecondHalf.size() > 1 ;i = (i+1)%SecondHalf.size())
+        {
+            Vector2D v1 = new Vector2D(firstPartLowestPoint, SecondHalf.get(i));
+            Vector2D v2 = new Vector2D(SecondHalf.get(i), SecondHalf.get((i+1)%SecondHalf.size()));
+            if (v1.CrossProduct(v2) > 0) {
                 secondPartLowestPoint = SecondHalf.get(i);
-                pointsInside.add(secondPartLowestPoint);
-            }
+                break; 
+            }                
         }
-
-        xxx.addAll(FirstHalf);
-        xxx.addAll(SecondHalf);
-        xxx.removeAll(pointsInside);
-        return xxx;
+        
+        i = FirstHalf.indexOf(firstPartLowestPoint);
+        for (i = (i + FirstHalf.size() - 1) % FirstHalf.size(); FirstHalf.size() > 1 ;i = (i+1)%FirstHalf.size())
+        {
+            Vector2D v1 = new Vector2D(secondPartLowestPoint, FirstHalf.get(i));
+            Vector2D v2 = new Vector2D(FirstHalf.get(i), FirstHalf.get((i+1)%FirstHalf.size()));
+            if (v1.CrossProduct(v2) < 0) {
+                firstPartLowestPoint = FirstHalf.get(i);
+                break; 
+            }                
+        }
+        
+        int index1f = FirstHalf.indexOf(firstPartHighestPoint);
+        int index2f = FirstHalf.indexOf(firstPartLowestPoint);
+              
+        for (i = (index1f+1)%FirstHalf.size(); i != index2f && counter < FirstHalf.size(); i=(i+1)%FirstHalf.size()) {
+            counter++;
+            points.add(FirstHalf.get(i));
+        }
+        FirstHalf.removeAll(points);
+           
+        int index1s = SecondHalf.indexOf(secondPartLowestPoint);
+        int index2s = SecondHalf.indexOf(secondPartHighestPoint);
+              
+        points.clear();
+        counter = 0;
+        for (i = (index1s+1)%SecondHalf.size(); i != index2s && counter < SecondHalf.size(); i=(i+1)%SecondHalf.size()) {
+            counter++;
+            points.add(SecondHalf.get(i));
+        }
+        
+        SecondHalf.removeAll(points);
+        
+        FirstHalf.addAll(SecondHalf);
+        
+        return FirstHalf;
     }
 
-    public static boolean IsCounterclockwise(ArrayList<Point2> VertexPoints) {
+    public static boolean IsCounterclockwise(ArrayList<Point2D> VertexPoints) {
         double crossProduct = 0;
 
-        Point2 p1 = VertexPoints.get(0);
-        Point2 p2 = VertexPoints.get(1);
-        Vector2 v1 = new Vector2(p1, p2);
+        Point2D p1 = VertexPoints.get(0);
+        Point2D p2 = VertexPoints.get(1);
+        Vector2D v1 = new Vector2D(p1, p2);
         for (int i = 1; i < VertexPoints.size() - 1; i++) {
             p1 = VertexPoints.get(i);
 
@@ -347,7 +363,7 @@ public class Polygon {
                 p2 = VertexPoints.get(i + 1);
             }
 
-            Vector2 v2 = new Vector2(p1, p2);
+            Vector2D v2 = new Vector2D(p1, p2);
 
             crossProduct += v1.CrossProduct(v2);
 

@@ -55,7 +55,7 @@ public class Canvas extends JPanel {
     }
     
     public void DrawCurrentPoint(Graphics2D g2d) {
-        Point2 currentPoint = Data.getVertexPoint();
+        Point2D currentPoint = Data.getVertexPoint();
         if (currentPoint != null) {
             g2d.setColor(currentPointColor);
             g2d.fill(new Ellipse2D.Float(currentPoint.getPointX()-radious/2F, currentPoint.getPointY()-radious/2F, radious, radious));
@@ -66,7 +66,7 @@ public class Canvas extends JPanel {
     }
     
     public void DrawMainPoint(Graphics2D g2d) {
-        Point2 mainPoint = Data.getMainPoint();
+        Point2D mainPoint = Data.getMainPoint();
         if (mainPoint != null) {
             g2d.setColor(mainPointColor);
             g2d.fill(new Ellipse2D.Float(mainPoint.getPointX()-radious/2F, mainPoint.getPointY()-radious/2F, radious, radious));
@@ -77,7 +77,7 @@ public class Canvas extends JPanel {
     }
     
     public void DrawPolygonVertex(Graphics2D g2d) {
-        ArrayList<Point2> polygonVertex = Data.getPolygonVertex();
+        ArrayList<Point2D> polygonVertex = Data.getPolygonVertex();
         for (int i = 0; i < polygonVertex.size(); i++) {
             g2d.setColor(vertexColor);
             g2d.fill(new Ellipse2D.Float(polygonVertex.get(i).getPointX()-radious/2F, polygonVertex.get(i).getPointY()-radious/2F, radious, radious));  

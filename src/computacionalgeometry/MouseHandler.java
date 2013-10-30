@@ -17,10 +17,10 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
-            Data.addPolygonVertex(new Point2 (e.getX(), e.getY()));
+            Data.addPolygonVertex(new Point2D (e.getX(), e.getY()));
         }
         else if (e.getButton() == MouseEvent.BUTTON3) {
-            Data.setMainPoint(new Point2 (e.getX(), e.getY()));      
+            Data.setMainPoint(new Point2D (e.getX(), e.getY()));      
         }
     }
     

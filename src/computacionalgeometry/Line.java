@@ -11,23 +11,23 @@ package computacionalgeometry;
 public class Line {
 
     public enum PointSituation {LEFT, RIGHT, ON};
-    private Point2 startPoint;
-    private Point2 endPoint;
+    private Point2D startPoint;
+    private Point2D endPoint;
 
-    public Line(Point2 p0, Point2 p1) {
+    public Line(Point2D p0, Point2D p1) {
         this.startPoint = p0;
         this.endPoint = p1;
     }
 
-    public Point2 GetStartPoint() {
+    public Point2D GetStartPoint() {
         return startPoint;
     }
 
-    public Point2 GetEndPoint() {
+    public Point2D GetEndPoint() {
         return endPoint;
     }
    
-    public static PointSituation PointSituatedAt(Line l, Point2 p) {
+    public static PointSituation PointSituatedAt(Line l, Point2D p) {
         
         float xa = l.GetStartPoint().getPointX(), ya = l.GetStartPoint().getPointY();
         float xb = l.GetEndPoint().getPointX()  , yb = l.GetEndPoint().getPointY();
@@ -46,7 +46,7 @@ public class Line {
         }
     }
     
-    public static boolean Intersection(Line l1, Line l2, Point2 i) {
+    public static boolean Intersection(Line l1, Line l2, Point2D i) {
         float xa = l1.GetStartPoint().getPointX(), ya = l1.GetStartPoint().getPointY();
         float xb = l1.GetEndPoint().getPointX()  , yb = l1.GetEndPoint().getPointY();
         float xc = l2.GetStartPoint().getPointX(), yc = l2.GetStartPoint().getPointY();
